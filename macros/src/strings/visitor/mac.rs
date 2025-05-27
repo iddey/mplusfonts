@@ -182,16 +182,34 @@ impl VisitMut for MacroVisitor {
             [node.expr.as_mut()],
 
         visit_expr_if_mut, node, &mut syn::ExprIf,
-            [node.cond.as_mut()],
+            [node.cond.as_mut()]
+                .into_iter()
+                .chain(
+                    node.else_branch
+                        .as_mut()
+                        .map(|(_, expr)| expr.as_mut()),
+                ),
 
         visit_expr_index_mut, node, &mut syn::ExprIndex,
-            [node.expr.as_mut()],
+            [node.expr.as_mut(), node.index.as_mut()],
 
         visit_expr_let_mut, node, &mut syn::ExprLet,
             [node.expr.as_mut()],
 
         visit_expr_match_mut, node, &mut syn::ExprMatch,
-            [node.expr.as_mut()],
+            [node.expr.as_mut()]
+                .into_iter()
+                .chain(
+                    node.arms
+                        .iter_mut()
+                        .flat_map(|arm| {
+                            arm.guard
+                                .as_mut_slice()
+                                .iter_mut()
+                                .map(|(_, expr)| expr.as_mut())
+                                .chain([arm.body.as_mut()])
+                        }),
+                ),
 
         visit_expr_method_call_mut, node, &mut syn::ExprMethodCall,
             [node.receiver.as_mut()]
@@ -203,8 +221,9 @@ impl VisitMut for MacroVisitor {
 
         visit_expr_range_mut, node, &mut syn::ExprRange,
             node.start
-                .as_deref_mut()
-                .into_iter()
+                .as_mut_slice()
+                .iter_mut()
+                .map(|expr| expr.as_mut())
                 .chain(node.end.as_deref_mut()),
 
         visit_expr_raw_addr_mut, node, &mut syn::ExprRawAddr,
@@ -272,8 +291,16 @@ impl VisitMut for MacroVisitor {
             node.init
                 .as_mut_slice()
                 .iter_mut()
-                .map(|local_init| &mut local_init.expr)
-                .map(|expr| expr.as_mut()),
+                .flat_map(|local_init| {
+                    [local_init.expr.as_mut()]
+                        .into_iter()
+                        .chain(
+                            local_init
+                                .diverge
+                                .as_mut()
+                                .map(|(_, expr)| expr.as_mut()),
+                        )
+                }),
 
         visit_trait_item_const_mut, node, &mut syn::TraitItemConst,
             node.default
