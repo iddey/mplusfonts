@@ -1,5 +1,5 @@
-use crate::mplus::Font;
 use crate::mplus::bitmap::units::Halfwidth;
+use crate::mplus::font::Font;
 
 pub struct GlyphSpacing {
     pub halfwidth: Halfwidth,

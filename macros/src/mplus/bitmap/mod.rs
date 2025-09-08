@@ -6,6 +6,7 @@ mod image;
 mod units;
 
 pub mod from_outline;
+pub mod from_svgpath;
 
 pub use dict::{CharDictionary, CharDictionaryKey};
 pub use font::BitmapFont;

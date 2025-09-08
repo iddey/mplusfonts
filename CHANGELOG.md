@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.3] - 2025-09-08
+
+### Added
+
+- Box-drawing characters with hinting available for use in monospaced text.
+
 ## [0.2.2] - 2025-08-17
 
 ### Fixed
@@ -99,3 +105,4 @@
 [0.2.0]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.0
 [0.2.1]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.1
 [0.2.2]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.2
+[0.2.3]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.3

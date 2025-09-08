@@ -144,4 +144,14 @@ bless_render_glyphs! {
         mplus!(1, 500, 25, false, 1, 4, kern('i'..='j', ["ı", "ȷ", "f", "ff", "fi", "ffi"])),
         seq!(C in 'i'..='j' { [#(concat!(C),)* "ı", "ȷ", "f", "ff", "fi", "ffi"] }),
         "tests/bitmap/render_glyphs_1_500_25_false_1_4_kern_dotless_i_j_liga.in",
+
+    render_glyphs_code_100_500_25_false_1_4_box_components,
+        mplus!(1, 500, 25, false, 1, 4, '─'..='┌', '╴'..='╻', '╋'..='╬', ["┐", "└","┘", "🮯"]),
+        seq!(C in '─'..='╿' { [#(concat!(C),)* "🮯"] }),
+        "tests/bitmap/render_glyphs_code_100_500_25_false_1_4_box_components.in",
+
+    render_glyphs_2_500_25_true_1_4_ex_char_cell_diagonals,
+        mplus!(1, 500, 25, false, 1, 4, '╱'..='╳', '🮠'..='🮮', '🯐'..='🯟'),
+        seq!(C in '╱'..='╳' { [#(concat!(C),)*] }),
+        "tests/bitmap/render_glyphs_2_500_25_true_1_4_ex_char_cell_diagonals.in",
 }
