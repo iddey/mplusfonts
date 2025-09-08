@@ -107,3 +107,9 @@ impl AsRef<str> for CharDictionaryKey {
         key
     }
 }
+
+impl<T: Into<String>> From<T> for CharDictionaryKey {
+    fn from(key: T) -> Self {
+        Self(key.into())
+    }
+}
