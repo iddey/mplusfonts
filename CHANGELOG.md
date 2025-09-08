@@ -6,6 +6,10 @@
 
 - Box-drawing characters with hinting available for use in monospaced text.
 
+### Changed
+
+- Upgrade dependencies: `regex 1.11.2` and `swash 0.2.5`.
+
 ## [0.2.2] - 2025-08-17
 
 ### Fixed
