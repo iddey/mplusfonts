@@ -11,6 +11,7 @@ pub struct GlyphMetrics<'a> {
     pub light: (Grid<3>, Stroke<'a>),
     pub heavy: (Grid<3>, Stroke<'a>),
     pub cross: (Grid<3>, Stroke<'a>),
+    pub block: Grid<25>,
 }
 
 impl GlyphMetrics<'_> {
@@ -50,6 +51,8 @@ impl GlyphMetrics<'_> {
         thick_stroke.cap(Cap::Square);
 
         let thin_width_no_snap_grid = Grid::new(width, height, None);
+        let zero_width_snap = hint.then_some((0.0, 0.0));
+        let zero_width_snap_grid = Grid::new(width, height, zero_width_snap);
 
         Self {
             halfwidth,
@@ -59,6 +62,7 @@ impl GlyphMetrics<'_> {
             light: (thin_width_snap_grid, thin_stroke),
             heavy: (thick_width_snap_grid, thick_stroke),
             cross: (thin_width_no_snap_grid, thin_stroke),
+            block: zero_width_snap_grid,
         }
     }
 }
