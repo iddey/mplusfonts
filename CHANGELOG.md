@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Block elements, including shade and fill characters, for use in monospaced text.
+- Block mosaic characters, which are two sets of semigraphical characters.
+
 ## [0.2.3] - 2025-09-08
 
 ### Added
