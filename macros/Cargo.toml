@@ -34,3 +34,6 @@ doc-comment = []
 
 # Enables the expected results to be generated for integration tests.
 bless-tests = []
+
+# Renders braille patterns with unpunched dots shown as very small squares.
+alt-braille = []
