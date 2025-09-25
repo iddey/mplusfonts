@@ -6,6 +6,8 @@
 
 - Block elements, including shade and fill characters, for use in monospaced text.
 - Block mosaic characters, which are two sets of semigraphical characters.
+- A set of braille patterns with or without unpunched dots shown. See the `mplusfonts-macros` crate
+  and its `alt-braille` feature for details.
 
 ## [0.2.3] - 2025-09-08
 

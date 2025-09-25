@@ -23,6 +23,14 @@ impl GlyphDrawing {
                 let offset = Vector::new(x_offset, 0.0);
                 let image_cluster = render(glyph_metrics, offset);
                 for (image_index, (data, placement)) in image_cluster.into_iter().enumerate() {
+                    if index == 0 {
+                        images.push(Vec::new());
+                    }
+
+                    if data.is_empty() {
+                        continue;
+                    }
+
                     let left = placement.left;
                     let top = glyph_metrics.top as i32 - placement.top;
                     let width = placement.width;
@@ -33,10 +41,6 @@ impl GlyphDrawing {
                         width,
                         data,
                     };
-
-                    if index == 0 {
-                        images.push(Vec::new());
-                    }
 
                     images
                         .get_mut(image_index)
