@@ -31,7 +31,7 @@ where
     /// Creates a new image drawable with the specified raw data and image width.
     pub const fn new(data: &'a [u8], width: u32) -> Self {
         let bits = C::Raw::BITS_PER_PIXEL * width as usize;
-        let bytes_per_row = bits / 8 + (bits % 8 > 0) as usize;
+        let bytes_per_row = bits.div_ceil(8);
         let Some(height) = data.len().checked_div(bytes_per_row) else {
             return Self {
                 data: &[],
@@ -86,7 +86,7 @@ where
 {
     fn colors(&self) -> impl IntoIterator<Item = C> {
         let bits = C::Raw::BITS_PER_PIXEL * self.size.width as usize;
-        let bytes_per_row = bits / 8 + (bits % 8 > 0) as usize;
+        let bytes_per_row = bits.div_ceil(8);
         let x_length = bytes_per_row * 8 / C::Raw::BITS_PER_PIXEL;
         let raw_data = RawDataSlice::new(self.data);
         let mut colors = raw_data.into_iter().map(Into::into);
