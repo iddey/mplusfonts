@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.2.4] - 2025-09-26
 
 ### Added
 
@@ -8,6 +8,10 @@
 - Block mosaic characters, which are two sets of semigraphical characters.
 - A set of braille patterns with or without unpunched dots shown. See the `mplusfonts-macros` crate
   and its `alt-braille` feature for details.
+
+### Changed
+
+- Upgrade dependencies: `regex 1.11.3`.
 
 ## [0.2.3] - 2025-09-08
 
@@ -119,3 +123,4 @@
 [0.2.1]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.1
 [0.2.2]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.2
 [0.2.3]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.3
+[0.2.4]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.4
