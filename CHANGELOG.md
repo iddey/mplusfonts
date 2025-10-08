@@ -17,6 +17,10 @@
 [`TextBox`]: https://docs.rs/embedded-text/latest/embedded_text/struct.TextBox.html
 [`BitmapFontStyle`]: https://docs.rs/mplusfonts/latest/mplusfonts/style/struct.BitmapFontStyle.html
 
+### Changed
+
+- Upgrade dependencies: `swash 0.2.6`.
+
 ## [0.2.4] - 2025-09-26
 
 ### Added
