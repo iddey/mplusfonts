@@ -4,7 +4,7 @@
 //! [`BinaryColor`], [`Gray2`], [`Gray4`], or [`Gray8`]. This module provides the functions that
 //! enable downsampling, color conversion from any [`GrayColor`] to any other color type that a
 //! [`DrawTarget`](../../embedded_graphics_core/draw_target/trait.DrawTarget.html) expects,
-//! applying color settings, and mixing colors in [`Screen`] blend mode.
+//! applying color settings, and mixing colors in [`Screen`] or [`WeightedAvg`] blend mode.
 
 use core::array;
 
@@ -35,15 +35,35 @@ pub trait Invert {
     fn invert(self) -> Self;
 }
 
-/// Screen blend mode with color conversion.
+/// Screen blend mode.
 ///
 /// A color that implements this trait can be mixed with another color of the same type,
 /// multiplying their inverse color components and inverting the resulting color, which may only
 /// shift a given color away from the start color and towards the end color.
 pub trait Screen {
-    /// Converts the first two color values to the range of colors that is defined by the specified
-    /// start and end colors, mixing the intermediate colors and returning the final result.
+    /// Mixes the color with the specified other color. Two bright colors do not necessarily produce
+    /// an even brighter color; that is only the case when start is a darker color than end is.
     fn screen(self, other: Self, start: Self, end: Self) -> Self;
+}
+
+/// Weighted arithmetic mean blend mode.
+///
+/// A color that implements this trait can be mixed with another color of the same type,
+/// calculating the component-wise weighted average of the two colors, where the weights are
+/// distributed based on how much more towards the respective end color one color is compared to
+/// the other color.
+pub trait WeightedAvg {
+    /// Mixes the color with the specified other color. Weights are not necessarily distributed as
+    /// 50–50 percent between the two colors; that is only the case when start and end are as far
+    /// away from the color as the other one is (from the other start and end — the ratio, that is).
+    fn weighted_avg(
+        self,
+        other: Self,
+        start: Self,
+        end: Self,
+        other_start: Self,
+        other_end: Self,
+    ) -> Self;
 }
 
 impl<T: Copy, const N: usize> Colormap<T, N> {
@@ -240,7 +260,11 @@ macro_rules! impl_screen_mix_gray {
         $(
             impl Screen for $gray_type {
                 fn screen(self, other: Self, start: Self, end: Self) -> Self {
-                    let luma = screen_mix_channel(self.luma(), other.luma(), start.luma(), end.luma());
+                    let luma = screen_mix_channel(
+                        self.luma(),
+                        other.luma(),
+                        start.luma(),
+                        end.luma());
 
                     <$gray_type>::new(luma)
                 }
@@ -257,6 +281,135 @@ impl Screen for BinaryColor {
             end
         } else {
             start
+        }
+    }
+}
+
+const fn weighted_avg_mix_channel(
+    first: u8,
+    second: u8,
+    first_start: u8,
+    first_end: u8,
+    second_start: u8,
+    second_end: u8,
+) -> u8 {
+    const SHIFT: usize = 15;
+    const CONST_0_5: i32 = 1 << (SHIFT - 1);
+
+    const fn weight(value: u8, start: u8, end: u8) -> i32 {
+        if start == end {
+            return 0;
+        }
+
+        let diff = end as i32 - start as i32;
+        let value = value as i32 - start as i32;
+        let value = value << (SHIFT - 1);
+
+        value / diff
+    }
+
+    let first_weight = weight(first, first_start, first_end);
+    let second_weight = weight(second, second_start, second_end);
+    let sum_of_weights = first_weight + second_weight;
+    let [first_half, second_half] = if first_weight == second_weight || sum_of_weights == 0 {
+        let first_half = (first as i32) << (SHIFT - 1);
+        let second_half = (second as i32) << (SHIFT - 1);
+
+        [first_half, second_half]
+    } else {
+        let first_weight = first_weight << SHIFT;
+        let first_weight = first_weight / sum_of_weights;
+        let second_weight = second_weight << SHIFT;
+        let second_weight = second_weight / sum_of_weights;
+
+        [first_weight * first as i32, second_weight * second as i32]
+    };
+    let result = first_half + second_half + CONST_0_5;
+
+    (result >> SHIFT) as u8
+}
+
+macro_rules! impl_weighted_avg_mix_rgb {
+    ($($rgb_type:ty),+) => {
+        $(
+            impl WeightedAvg for $rgb_type {
+                fn weighted_avg(
+                    self,
+                    other: Self,
+                    start: Self,
+                    end: Self,
+                    other_start: Self,
+                    other_end: Self,
+                ) -> Self {
+                    let [r, g, b] = [Self::r, Self::g, Self::b].map(|value_of| {
+                        weighted_avg_mix_channel(
+                            value_of(&self),
+                            value_of(&other),
+                            value_of(&start),
+                            value_of(&end),
+                            value_of(&other_start),
+                            value_of(&other_end),
+                        )
+                    });
+
+                    <$rgb_type>::new(r, g, b)
+                }
+            }
+        )*
+    }
+}
+
+impl_weighted_avg_mix_rgb!(
+    Rgb555, Bgr555, Rgb565, Bgr565, Rgb666, Bgr666, Rgb888, Bgr888
+);
+
+macro_rules! impl_weighted_avg_mix_gray {
+    ($($gray_type:ty),+) => {
+        $(
+            impl WeightedAvg for $gray_type {
+                fn weighted_avg(
+                    self,
+                    other: Self,
+                    start: Self,
+                    end: Self,
+                    other_start: Self,
+                    other_end: Self,
+                ) -> Self {
+                    let luma = weighted_avg_mix_channel(
+                        self.luma(),
+                        other.luma(),
+                        start.luma(),
+                        end.luma(),
+                        other_start.luma(),
+                        other_end.luma(),
+                    );
+
+                    <$gray_type>::new(luma)
+                }
+            }
+        )*
+    }
+}
+
+impl_weighted_avg_mix_gray!(Gray2, Gray4, Gray8);
+
+impl WeightedAvg for BinaryColor {
+    fn weighted_avg(
+        self,
+        other: Self,
+        start: Self,
+        end: Self,
+        other_start: Self,
+        other_end: Self,
+    ) -> Self {
+        if start == other_start {
+            if self == end || other == other_end {
+                end
+            } else {
+                start
+            }
+        } else {
+            self
         }
     }
 }
@@ -364,5 +517,67 @@ mod tests {
         screen_mix_channel_128_128_on_128_128, 128, 128, 128, 128, 128,
         screen_mix_channel_0_0_on_128_128, 0, 0, 128, 128, 128,
         screen_mix_channel_0_0_on_0_0, 0, 0, 0, 0, 0,
+    }
+
+    macro_rules! test_weighted_avg_mix_channel {
+        (
+            $(
+                $fn_ident:ident,
+                $first:expr,
+                $second:expr,
+                $first_start:expr,
+                $first_end:expr,
+                $second_start:expr,
+                $second_end:expr,
+                $expected:expr,
+            )*
+        ) => {
+            $(
+                #[test]
+                fn $fn_ident() {
+                    let result = weighted_avg_mix_channel(
+                        $first,
+                        $second,
+                        $first_start,
+                        $first_end,
+                        $second_start,
+                        $second_end,
+                    );
+                    assert_eq!(result, $expected);
+                }
+            )*
+        }
+    }
+
+    test_weighted_avg_mix_channel! {
+        weighted_avg_mix_channel_255_255_on_0_255_and_0_255, 255, 255, 0, 255, 0, 255, 255,
+        weighted_avg_mix_channel_128_128_on_0_255_and_0_255, 128, 128, 0, 255, 0, 255, 128,
+        weighted_avg_mix_channel_64_192_on_0_255_and_0_255, 64, 192, 0, 255, 0, 255, 160,
+        weighted_avg_mix_channel_32_96_on_0_255_and_0_255, 32, 96, 0, 255, 0, 255, 80,
+        weighted_avg_mix_channel_32_224_on_0_255_and_0_255, 32, 224, 0, 255, 0, 255, 200,
+
+        weighted_avg_mix_channel_128_255_on_128_0_and_128_255, 128, 255, 128, 0, 128, 255, 255,
+        weighted_avg_mix_channel_128_128_on_128_0_and_128_255, 128, 128, 128, 0, 128, 255, 128,
+        weighted_avg_mix_channel_64_192_on_128_0_and_128_255, 64, 192, 128, 0, 128, 255, 128,
+        weighted_avg_mix_channel_0_255_on_128_0_and_128_255, 0, 255, 128, 0, 128, 255, 128,
+        weighted_avg_mix_channel_0_128_on_128_0_and_128_255, 0, 128, 128, 0, 128, 255, 0,
+
+        weighted_avg_mix_channel_255_255_on_255_0_and_0_255, 255, 255, 255, 0, 0, 255, 255,
+        weighted_avg_mix_channel_192_192_on_255_0_and_0_255, 192, 192, 255, 0, 0, 255, 192,
+        weighted_avg_mix_channel_128_128_on_255_0_and_0_255, 128, 128, 255, 0, 0, 255, 128,
+        weighted_avg_mix_channel_64_64_on_255_0_and_0_255, 64, 64, 255, 0, 0, 255, 64,
+        weighted_avg_mix_channel_0_0_on_255_0_and_0_255, 0, 0, 255, 0, 0, 255, 0,
+
+        weighted_avg_mix_channel_255_128_on_255_0_and_0_255, 255, 128, 255, 0, 0, 255, 128,
+        weighted_avg_mix_channel_255_0_on_255_0_and_0_255, 255, 0, 255, 0, 0, 255, 128,
+        weighted_avg_mix_channel_64_192_on_255_0_and_0_255, 64, 192, 255, 0, 0, 255, 128,
+        weighted_avg_mix_channel_32_224_on_255_0_and_0_255, 0, 255, 255, 0, 0, 255, 128,
+        weighted_avg_mix_channel_0_255_on_255_0_and_0_255, 0, 255, 255, 0, 0, 255, 128,
+
+        weighted_avg_mix_channel_255_255_on_255_255_and_255_255, 255, 255, 255, 255, 255, 255, 255,
+        weighted_avg_mix_channel_192_255_on_0_255_and_255_255, 192, 255, 0, 255, 255, 255, 192,
+        weighted_avg_mix_channel_128_255_on_0_255_and_255_255, 128, 255, 0, 255, 255, 255, 128,
+        weighted_avg_mix_channel_0_128_on_0_0_and_128_128, 0, 128, 0, 0, 128, 128, 64,
+        weighted_avg_mix_channel_0_0_on_0_0_and_0_0, 0, 0, 0, 0, 0, 0, 0,
     }
 }

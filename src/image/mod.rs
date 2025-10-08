@@ -20,13 +20,14 @@ use embedded_graphics::pixelcolor::raw::BigEndian;
 use embedded_graphics::primitives::Rectangle;
 use embedded_graphics::transform::Transform;
 
+pub use mix::with_colormap::{WithColormap, WithColormapImage, WithColormapImageMix};
 pub use mix::{ImageMix, Mixed};
 pub use raw::ImageRaw;
 pub use set::ImageSet;
 pub use sub::{ImageDrawableExt, SubImage};
 
 /// Image that owns the image drawable and holds image offset data.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Image<T: ImageDrawable> {
     image_drawable: T,

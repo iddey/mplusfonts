@@ -50,13 +50,13 @@ Adds an *optimal* subset of [**M<sup>+</sup> FONTS**] to your next embedded Rust
 
 ```toml
 [dependencies]
-mplusfonts = "0.2"
+mplusfonts = "0.3"
 ```
 
 ```rust
 #[mplusfonts::strings]
 pub fn main() -> Result<(), Infallible> {
-    let text = format!("{} KB_OK", 16 * 40);
+    let text = format!("{} KB OK", 16 * 40);
 
     let mut display: SimulatorDisplay<Rgb565> = SimulatorDisplay::new(Size::new(320, 240));
 

@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.3.0] - 2025-10-08
+
+### Added
+
+- [`TextBox`] interprets ANSI escape codes for text styling with its ANSI plugin, and `mplusfonts`’s
+  [`BitmapFontStyle`] now handles calls to set or reset the text and background colors, to enable or
+  disable text underline, and to enable or disable strikethrough _programmatically_ as text is being
+  rendered.
+
+### Fixed
+
+- Monospaced text using [`TextBox`] having its rightmost column of pixels cut off before whitespace
+  for `code(100)` together with certain `size` parameters (for example, at 12 pixels per _em_-size).
+
+[`TextBox`]: https://docs.rs/embedded-text/latest/embedded_text/struct.TextBox.html
+[`BitmapFontStyle`]: https://docs.rs/mplusfonts/latest/mplusfonts/style/struct.BitmapFontStyle.html
+
 ## [0.2.4] - 2025-09-26
 
 ### Added
@@ -124,3 +141,4 @@
 [0.2.2]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.2
 [0.2.3]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.3
 [0.2.4]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.4
+[0.3.0]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.0

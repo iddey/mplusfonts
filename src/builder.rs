@@ -3,7 +3,7 @@ use embedded_graphics::pixelcolor::raw::BigEndian;
 use embedded_graphics::pixelcolor::{BinaryColor, PixelColor};
 use embedded_graphics::text::DecorationColor;
 
-use crate::color::{Invert, Screen};
+use crate::color::{Invert, Screen, WeightedAvg};
 use crate::font::BitmapFont;
 use crate::style::BitmapFontStyle;
 
@@ -13,7 +13,7 @@ use crate::style::BitmapFontStyle;
 pub struct BitmapFontStyleBuilder<'a, 'b, T, C, const N: usize>
 where
     C: PixelColor + From<C::Raw>,
-    T: PixelColor + Default + Invert + Screen,
+    T: PixelColor + Default + Invert + Screen + WeightedAvg,
     RawDataSlice<'a, C::Raw, BigEndian>: IntoIterator<Item = C::Raw>,
 {
     style: BitmapFontStyle<'a, 'b, T, C, N>,
@@ -22,7 +22,7 @@ where
 impl<'a, 'b, T, C, const N: usize> BitmapFontStyleBuilder<'a, 'b, T, C, N>
 where
     C: PixelColor + From<C::Raw>,
-    T: PixelColor + Default + Invert + Screen,
+    T: PixelColor + Default + Invert + Screen + WeightedAvg,
     RawDataSlice<'a, C::Raw, BigEndian>: IntoIterator<Item = C::Raw>,
 {
     /// Resets the text color to the default value for the style.
@@ -94,15 +94,14 @@ where
         D: PixelColor + From<D::Raw>,
         RawDataSlice<'a, D::Raw, BigEndian>: IntoIterator<Item = D::Raw>,
     {
-        BitmapFontStyleBuilder {
-            style: BitmapFontStyle {
-                font,
-                text_color: self.style.text_color,
-                background_color: self.style.background_color,
-                underline_color: self.style.underline_color,
-                strikethrough_color: self.style.strikethrough_color,
-            },
-        }
+        let mut style = BitmapFontStyle::const_default();
+        style.font = font;
+        style.text_color = self.style.text_color;
+        style.background_color = self.style.background_color;
+        style.underline_color = self.style.underline_color;
+        style.strikethrough_color = self.style.strikethrough_color;
+
+        BitmapFontStyleBuilder { style }
     }
 
     /// Consumes the builder, returning the style.
@@ -113,18 +112,12 @@ where
 
 impl<T> BitmapFontStyleBuilder<'_, '_, T, BinaryColor, 0>
 where
-    T: PixelColor + Default + Invert + Screen,
+    T: PixelColor + Default + Invert + Screen + WeightedAvg,
 {
     /// Creates a new, empty builder using text and background colors of type `T`.
     pub const fn new() -> Self {
         Self {
-            style: BitmapFontStyle {
-                font: &BitmapFont::NULL,
-                text_color: None,
-                background_color: None,
-                underline_color: DecorationColor::None,
-                strikethrough_color: DecorationColor::None,
-            },
+            style: BitmapFontStyle::const_default(),
         }
     }
 }
@@ -132,18 +125,12 @@ where
 impl<'a, T, C, const N: usize> Default for BitmapFontStyleBuilder<'a, '_, T, C, N>
 where
     C: PixelColor + From<C::Raw>,
-    T: PixelColor + Default + Invert + Screen,
+    T: PixelColor + Default + Invert + Screen + WeightedAvg,
     RawDataSlice<'a, C::Raw, BigEndian>: IntoIterator<Item = C::Raw>,
 {
     fn default() -> Self {
         Self {
-            style: BitmapFontStyle {
-                font: &BitmapFont::NULL,
-                text_color: None,
-                background_color: None,
-                underline_color: DecorationColor::None,
-                strikethrough_color: DecorationColor::None,
-            },
+            style: BitmapFontStyle::const_default(),
         }
     }
 }
