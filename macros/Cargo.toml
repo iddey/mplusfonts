@@ -24,7 +24,7 @@ syn = { version = "2.0", features = ["full", "visit-mut"] }
 
 [dev-dependencies]
 embedded-graphics = "0.8.1"
-embedded-graphics-simulator = "0.7.0"
+embedded-graphics-simulator = "0.8.0"
 mplusfonts = "0.3"
 seq-macro = "0.3.6"
 
