@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Upgrade dev-dependencies: `embedded-text 0.7.3` and `embedded-graphics-simulator 0.8.0`.
+
 ## [0.3.0] - 2025-10-08
 
 ### Added
