@@ -1,7 +1,9 @@
 mod offsets;
 mod spacing;
 
-use std::collections::BTreeMap;
+use std::mem;
+use std::mem::MaybeUninit;
+use std::ops::{DerefMut, IndexMut};
 use std::sync::Mutex;
 use std::thread;
 
@@ -33,10 +35,10 @@ impl GlyphOffsets {
         let x_offset = glyph_spacing.compensate(self.x_offset);
         let y_offset = self.y_offset;
         let is_repeating = glyph_spacing.is_code || advance_width == advance_height || self.id == 0;
-        let images = if let Halfwidth::Floor(_) | Halfwidth::Ceil = glyph_spacing.halfwidth {
+        let mut images = if let Halfwidth::Floor(_) | Halfwidth::Ceil = glyph_spacing.halfwidth {
             if !self.is_overlay || self.x_offset < 0.0 {
                 let length = if is_repeating { 1 } else { positions };
-                let images = Mutex::new(BTreeMap::new());
+                let images = Mutex::new(Vec::from_iter((0..length).map(|_| MaybeUninit::uninit())));
                 thread::scope(|scope| {
                     let images = &images;
                     (0..length).zip(scalers).for_each(|(index, scaler)| {
@@ -48,41 +50,46 @@ impl GlyphOffsets {
                                 .render(scaler, self.id)
                                 .expect("expected glyph outline");
 
-                            if image.data.is_empty() {
-                                return;
-                            }
-
                             let left = image.placement.left;
                             let left = left.saturating_add_unsigned(centering_offset as u32);
                             let top = image.placement.top;
                             let width = image.placement.width;
-                            let data = color::quantize(&image.data, width, bit_depth);
                             let image = Image {
                                 left,
                                 top,
                                 width,
-                                data,
+                                data: match image.data.as_slice() {
+                                    [] => image.data,
+                                    data => color::quantize(data, width, bit_depth),
+                                },
                             };
 
                             images
                                 .lock()
                                 .expect("expected no-poison lock on images")
-                                .insert(index, image);
+                                .deref_mut()
+                                .index_mut(index as usize)
+                                .write(image);
                         });
                     });
                 });
 
-                images
+                let images = images
                     .into_inner()
-                    .expect("expected no-poison lock on images")
-                    .into_values()
-                    .collect()
+                    .expect("expected no-poison lock on images");
+
+                // SAFETY: The full set of images will have been initialized by this point.
+                unsafe { mem::transmute::<Vec<MaybeUninit<Image>>, Vec<Image>>(images) }
             } else {
                 Vec::new()
             }
         } else {
             Vec::new()
         };
+
+        if images.iter().all(|image| image.data.is_empty()) {
+            images.clear();
+        }
 
         Glyph {
             x_offset: x_offset - x_offset.fract(),

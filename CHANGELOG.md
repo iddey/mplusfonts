@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Drawing certain block elements (for example, `RIGHT ONE EIGHTH BLOCK`) for bitmap fonts that have
+  certain `size` parameters, when some but not all of the _x_-offset parameters generate images that
+  contain visible pixels, do no longer result in an invalid number of array elements if `positions`,
+  greater than one, were expected.
+
 ### Changed
 
 - Upgrade dev-dependencies: `embedded-text 0.7.3` and `embedded-graphics-simulator 0.8.0`.

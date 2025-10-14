@@ -1,6 +1,10 @@
 mod drawing;
 mod metrics;
 
+use std::mem;
+use std::mem::MaybeUninit;
+use std::ops::IndexMut;
+
 use swash::zeno::Vector;
 
 use crate::mplus::bitmap::color;
@@ -14,7 +18,7 @@ impl GlyphDrawing {
     pub fn scale(&self, positions: u8, bit_depth: u8, glyph_metrics: &GlyphMetrics) -> Vec<Glyph> {
         let advance_width = glyph_metrics.width;
         let is_repeating = glyph_metrics.is_code;
-        let images = if let Halfwidth::Floor(_) | Halfwidth::Ceil = glyph_metrics.halfwidth {
+        let mut images = if let Halfwidth::Floor(_) | Halfwidth::Ceil = glyph_metrics.halfwidth {
             let length = if is_repeating { 1 } else { positions };
             let mut images = Vec::new();
             (0..length).for_each(|index| {
@@ -24,35 +28,41 @@ impl GlyphDrawing {
                 let image_cluster = render(glyph_metrics, offset);
                 for (image_index, (data, placement)) in image_cluster.into_iter().enumerate() {
                     if index == 0 {
-                        images.push(Vec::new());
-                    }
-
-                    if data.is_empty() {
-                        continue;
+                        images.push(Vec::from_iter((0..length).map(|_| MaybeUninit::uninit())));
                     }
 
                     let left = placement.left;
                     let top = glyph_metrics.top as i32 - placement.top;
                     let width = placement.width;
-                    let data = color::quantize(&data, width, bit_depth);
                     let image = Image {
                         left,
                         top,
                         width,
-                        data,
+                        data: match data.as_slice() {
+                            [] => data,
+                            data => color::quantize(data, width, bit_depth),
+                        },
                     };
 
                     images
                         .get_mut(image_index)
                         .expect("exected image index to be less than number of images at `0`")
-                        .push(image);
+                        .index_mut(index as usize)
+                        .write(image);
                 }
             });
 
-            images
+            // SAFETY: The full set of images will have been initialized by this point.
+            unsafe { mem::transmute::<Vec<Vec<MaybeUninit<Image>>>, Vec<Vec<Image>>>(images) }
         } else {
             Vec::new()
         };
+
+        for images in images.iter_mut() {
+            if images.iter().all(|image| image.data.is_empty()) {
+                images.clear();
+            }
+        }
 
         let mut images = images.into_iter().zip(self.id..);
         let first = images.next().map(|(images, id)| Glyph {
