@@ -12,6 +12,9 @@
 ### Changed
 
 - Upgrade dev-dependencies: `embedded-text 0.7.3` and `embedded-graphics-simulator 0.8.0`.
+- The same optimization that was applied to font rasterization, that allowed text shaping to become
+  multithreaded, has been been applied to characters that are backed by vector graphics (box-drawing
+  characters, block elements, and so on).
 
 ## [0.3.0] - 2025-10-08
 
