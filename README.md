@@ -4,9 +4,9 @@ Parametrized bitmap fonts for [`embedded-graphics`], with font rasterization pow
 
 Adds an *optimal* subset of [**M<sup>+</sup> FONTS**] to your next embedded Rust project.[^1]
 
-![Screenshot with English and Japanese text](assets/mango-screenshot.png "Font definitions:
-`mplus!(code(120), 500, 15, false, 1, 8)`
-`mplus!(2, 800, 9, true, 16, 8)`")
+| 0.42″ OLED                                     | «TODO»                                         |
+| ---------------------------------------------- | ---------------------------------------------- |
+| ![monochrome](assets/mini-mono-boards.png)     | ![grayscale](assets/mango-screenshot.png)      |
 
 [^1]: Rust 2024 is required to build this crate
 
@@ -24,6 +24,9 @@ Adds an *optimal* subset of [**M<sup>+</sup> FONTS**] to your next embedded Rust
 - **Japanese scripts** - Designed by Coji Morishita and licensed under the SIL Open Fonts License
   ([LICENSE]), **M<sup>+</sup> FONTS** has support for over 5 700 kanji glyphs.[^2] Since this
   crate is based on **M<sup>+</sup> FONTS**, you gain access to all of its features.
+- **Box-drawing characters** - `mplusfonts` includes a set of characters for terminal emulation
+  and semigraphics. These come in the form of scalable vector graphics aligned to the pixel grid
+  and then converted to bitmap images.
 
 [**M<sup>+</sup> FONTS**]: https://mplusfonts.github.io/
 [`embedded-graphics`]: https://crates.io/crates/embedded-graphics
@@ -50,7 +53,7 @@ Adds an *optimal* subset of [**M<sup>+</sup> FONTS**] to your next embedded Rust
 
 ```toml
 [dependencies]
-mplusfonts = "0.3"
+mplusfonts = "0.3.1"
 ```
 
 ```rust
@@ -76,14 +79,8 @@ pub fn main() -> Result<(), Infallible> {
 }
 ```
 
-For more examples, see the [examples] folder.
+For more examples, see the [examples](examples) folder.
 
-## Limitations
-
-* **Transparent backgrounds are not supported.** Alpha compositing is not available; this crate
-  does not have an `alloc` feature.
-
-[examples]: examples
 [`BitmapFontStyle`]: https://docs.rs/mplusfonts/latest/mplusfonts/style/struct.BitmapFontStyle.html
 
 ## Minimum supported Rust version
