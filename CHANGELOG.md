@@ -1,6 +1,13 @@
 # Changelog
 
-## [Unreleased]
+## [0.3.1] - 2025-10-31
+
+### Added
+
+- First two examples that run on development boards with built-in displays instead of simulating one
+  like previous examples do. These miniature OLED screens have pixels that are either _on_ or _off_,
+  so this is not a demonstration of the grayscale font rasterization that `mplusfonts` is otherwise
+  capable of doing.
 
 ### Fixed
 
@@ -162,3 +169,4 @@
 [0.2.3]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.3
 [0.2.4]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.4
 [0.3.0]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.0
+[0.3.1]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.1
