@@ -1,0 +1,21 @@
+[target.thumbv6m-none-eabi]
+linker = "flip-link"
+runner = "picotool load --update --verify --execute --type elf"
+rustflags = [
+    "-C", "link-arg=--nmagic",
+    "-C", "link-arg=-Tlink.x",
+    "-C", "link-arg=-Tlink-rp.x",
+]
+
+[build]
+target = "thumbv6m-none-eabi"
+
+[profile.dev]
+opt-level = "z"
+debug = "full"
+lto = "fat"
+
+[profile.release]
+opt-level = "z"
+debug = "none"
+lto = "fat"

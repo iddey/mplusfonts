@@ -1,0 +1,31 @@
+[package]
+name = "mplusfonts-examples-esp32s3"
+version = "0.1.0"
+edition = "2024"
+readme = true
+repository = "https://github.com/iddey/mplusfonts"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[[bin]]
+name = "mini-mono"
+
+[dependencies]
+embassy-executor = "0.9.1"
+embassy-futures = "0.1.2"
+embassy-sync = "0.7.2"
+embassy-time = "0.5.0"
+embassy-usb = "0.5.1"
+embedded-graphics = { version = "0.8.1", features = ["fixed"] }
+esp-bootloader-esp-idf = { version = "0.4.0", features = ["esp32s3"] }
+esp-hal = { version = "1.0.0", features = ["esp32s3", "unstable"] }
+esp-hal-smartled = { git = "https://github.com/esp-rs/esp-hal-community.git", rev = "ab431653", features = ["esp32s3"] }
+esp-rtos = { version = "0.2.0", features = ["embassy", "esp32s3"] }
+fixed = "1.29.0"
+heapless = { version = "0.9.1", features = ["portable-atomic-critical-section"] }
+mplusfonts = { version = "0.3.1", path = "../.." }
+mplusfonts-examples-common = { version = "0.1.0", path = "../common" }
+portable-atomic = { version = "1.11.1", features = ["critical-section"] }
+smart-leds-trait = "0.3.2"
+ssd1306 = "0.10.0"
+static_cell = "2.1.1"
