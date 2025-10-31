@@ -18,6 +18,7 @@
 
 ### Changed
 
+- Upgrade dependencies: `regex 1.12.2`.
 - Upgrade dev-dependencies: `embedded-text 0.7.3` and `embedded-graphics-simulator 0.8.0`.
 - The same optimization that was applied to font rasterization, that allowed text shaping to become
   multithreaded, has been been applied to characters that are backed by vector graphics (box-drawing
