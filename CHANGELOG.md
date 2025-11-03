@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+- The compiler not being able to solve `&'c Colormap<T, N>: Format` and `&'d Colormap<T, N>: Format`
+  where predicates when the `defmt` feature is enabled, with `WithColormapImageMix`’s derive of the
+  `Format` trait not using higher-rank trait bounds.
+
 ## [0.3.1] - 2025-10-31
 
 ### Added

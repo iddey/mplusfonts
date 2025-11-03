@@ -38,7 +38,6 @@ where
 /// While also performing color conversion, drawing this image drawable involves mixing the colors
 /// that form pairs of pixels in [`WeightedAvg`] blend mode.
 #[derive(Debug)]
-#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct WithColormapImageMix<'a, 'b, 'c, 'd, U, V, T, const N: usize>
 where
     T: PixelColor + Default + Invert + Screen + WeightedAvg,
@@ -93,6 +92,37 @@ where
             other_colormap,
             area,
         }
+    }
+}
+
+#[cfg(feature = "defmt")]
+impl<'a, 'b, U, V, T, const N: usize> defmt::Format
+    for WithColormapImageMix<'a, 'b, '_, '_, U, V, T, N>
+where
+    T: PixelColor + Default + Invert + Screen + WeightedAvg,
+    U: ImageDrawable + Colors<U::Color>,
+    V: ImageDrawable + Colors<V::Color>,
+    Image<SubImage<'a, U>>: defmt::Format,
+    Image<SubImage<'b, V>>: defmt::Format,
+    for<'c> &'c Colormap<T, N>: defmt::Format,
+    Rectangle: defmt::Format,
+{
+    fn format(&self, formatter: defmt::Formatter) {
+        defmt::write!(
+            formatter,
+            "WithColormapImageMix {{ \
+                first: {=?:?}, \
+                second: {=?:?}, \
+                colormap: {=?:?}, \
+                other_colormap: {=?:?}, \
+                area: {=?:?} \
+            }}",
+            self.first,
+            self.second,
+            self.colormap,
+            self.other_colormap,
+            self.area,
+        )
     }
 }
 
