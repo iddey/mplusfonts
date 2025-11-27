@@ -8,6 +8,12 @@
   where predicates when the `defmt` feature is enabled, with `WithColormapImageMix`’s derive of the
   `Format` trait not using higher-rank trait bounds.
 
+### Changed
+
+- Crop images of box-drawing characters that may end up with a border of empty pixels because of how
+  the `zeno` crate performs the rasterization of the end caps of strokes along circular arcs if they
+  are sitting flush with one of the edges found in the pixel grid.
+
 ## [0.3.1] - 2025-10-31
 
 ### Added

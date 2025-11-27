@@ -4,7 +4,7 @@ use crate::mplus::bitmap::units::Grid;
 
 use super::super::single::parts::*;
 use super::{Chain, GlyphMetrics, ImageCluster};
-use super::{offset_table, render_image};
+use super::{offset_table, render_image, trim_image};
 
 fn path_commands(chain: &Chain) -> Vec<Command> {
     let Chain(points) = chain;
@@ -46,6 +46,7 @@ macro_rules! def_unicode_char {
                 let chain = $fn_call_path(points, offset);
                 let commands = path_commands(&chain);
                 let image = render_image(commands.as_slice(), stroke);
+                let image = trim_image(image);
 
                 Vec::from([image])
             }
