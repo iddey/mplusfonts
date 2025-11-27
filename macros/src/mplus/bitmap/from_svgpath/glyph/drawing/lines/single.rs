@@ -8,7 +8,7 @@ pub mod with_single;
 use swash::zeno::Vector;
 
 use super::{Chain, ChainList, GlyphMetrics, Image, ImageCluster, Matrix, Points};
-use super::{offset_table, render_image};
+use super::{offset_table, render_image, trim_image};
 
 macro_rules! def_unicode_char {
     (
