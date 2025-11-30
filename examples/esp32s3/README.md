@@ -1,19 +1,24 @@
 ## Prerequisites
 
-For running the examples, make sure your have an environment set up for `ESP32-S3` development. The
-compiler from an `espup` installation works.
+For running the examples, make sure you have your environment set up for `ESP32-S3` development.
+The compiler from an `espup` installation works.
 
 - `esp` toolchain, which includes Rust with Xtensa support, with `esp32s3` enabled as a target.
 - `espflash` tool, which is configured as the runner in `.cargo/config.toml` for uploading.
 
 ## Examples
 
-Binaries are uploaded via USB in bootloader mode. Usage: `cargo run --bin <example>`
+Binaries are uploaded via USB in bootloader mode. Usage:
+`cargo run --bin <example> --features esp32s3`
 
 - `mini-mono` - An example that uses a `BinaryColor` bitmap font for a `BinaryColor` OLED display.
   - `common` - A library crate that contains the bitmap font definition used: `BITMAP_FONT_1`; this
     avoids having to do `mplus!` macro expansion with incremental builds of the example application
     crate.
+
+The `esp32s3` feature is required for all binaries in this crate, it enables the `esp32s3` features
+of the `esp-*` crates; this enables additional crate features for when multiple processor cores are
+available.
 
 ## Minimum supported Rust version
 

@@ -55,6 +55,7 @@ static EP_MEMORY: StaticCell<[u8; 1024]> = StaticCell::new();
 static USB_CONTROL: StaticCell<[u8; N]> = StaticCell::new();
 static CDC_ACM_STATE: StaticCell<State> = StaticCell::new();
 static PUB_SUB_CHANNEL: StaticCell<PubSubChannel> = StaticCell::new();
+static SMART_LED_BUFFER: StaticCell<[rmt::PulseCode; 25]> = StaticCell::new();
 
 #[mplusfonts::strings]
 static TEXTUAL_DATA: LazyLock<(&str, BitmapFont<'static, BinaryColor, 2>)> = LazyLock::new(|| {
@@ -117,7 +118,7 @@ fn main() -> ! {
 
     // Set up WS2812 as an activity and panic indicator
     let rmt = rmt::Rmt::new(p.RMT, Rate::from_mhz(80)).unwrap();
-    let buffer = smart_led_buffer!(1);
+    let buffer = SMART_LED_BUFFER.init(smart_led_buffer!(1));
     let adapter = SmartLedsAdapter::new(rmt.channel0, p.GPIO39, buffer);
     rgb_led::init(adapter);
 

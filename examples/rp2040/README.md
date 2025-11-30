@@ -1,6 +1,6 @@
 ## Prerequisites
 
-For running the examples, make sure your have an environment set up for `RP2040` development. The
+For running the examples, make sure you have your environment set up for `RP2040` development. The
 compiler from a `rustup` installation works.
 
 - `stable` channel Rust with `thumbv6m-none-eabi` added as a target for builds.
@@ -9,12 +9,17 @@ compiler from a `rustup` installation works.
 
 ## Examples
 
-Binaries are uploaded via USB in bootloader mode. Usage: `cargo run --bin <example>`
+Binaries are uploaded via USB in bootloader mode. Usage:
+`cargo run --bin <example> --features rp2040`
 
 - `mini-mono` - An example that uses a `BinaryColor` bitmap font for a `BinaryColor` OLED display.
   - `common` - A library crate that contains the bitmap font definition used: `BITMAP_FONT_1`; this
     avoids having to do `mplus!` macro expansion with incremental builds of the example application
     crate.
+
+The `rp2040` feature is required for all binaries in this crate, it enables the `rp2040` feature of
+the `embassy-rp` crate; this enables additional crate features for when multiple processor cores are
+available.
 
 ## Minimum supported Rust version
 
