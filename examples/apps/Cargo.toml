@@ -22,7 +22,7 @@ embedded-graphics = { version = "0.8.1", features = ["fixed"] }
 embedded-io-async = "0.7.0"
 esp-bootloader-esp-idf = "0.4.0"
 esp-hal = { version = "1.0.0", features = ["unstable"] }
-esp-hal-smartled = { git = "https://github.com/esp-rs/esp-hal-community.git", rev = "ab431653" }
+esp-hal-smartled = "0.17.0"
 esp-rtos = { version = "0.2.0", features = ["embassy"] }
 fixed = "1.29.0"
 fixed-macro = "1.2.0"
