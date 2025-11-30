@@ -1,17 +1,17 @@
 [package]
 name = "mplusfonts-examples-common"
-version = "0.1.0"
-edition = "2024"
-readme = true
-repository = "https://github.com/iddey/mplusfonts"
-license = "MIT OR Apache-2.0"
-publish = false
+version.workspace = true
+edition.workspace = true
+readme.workspace = true
+repository.workspace = true
+license.workspace = true
+publish.workspace = true
 
 [dependencies]
-embassy-sync = "0.7.2"
-embassy-usb = "0.5.1"
-embedded-graphics = "0.8.1"
-heapless = "0.9.1"
-mplusfonts = { version = "0.3.1", path = "../.." }
-portable-atomic = "1.11.1"
-static_cell = "2.1.1"
+embassy-sync.workspace = true
+embassy-usb.workspace = true
+embedded-graphics.workspace = true
+heapless.workspace = true
+mplusfonts.workspace = true
+portable-atomic.workspace = true
+static_cell.workspace = true

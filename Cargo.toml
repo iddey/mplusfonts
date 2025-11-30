@@ -25,9 +25,5 @@ chrono = { version = "0.4", features = ["clock"] }
 defmt = ["dep:defmt", "embedded-graphics/defmt"]
 
 [workspace]
-members = [
-    "examples/common",
-    "examples/esp32s3",
-    "examples/rp2040",
-    "macros",
-]
+members = ["macros"]
+exclude = ["examples"]
