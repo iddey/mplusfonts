@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["common", "esp32s3", "rp2040"]
+members = ["common", "esp32c3", "esp32s3", "rp2040"]
 
 [workspace.package]
 readme = true
