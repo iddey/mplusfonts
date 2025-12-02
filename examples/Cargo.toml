@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["common", "esp32s3", "rp2040"]
+members = ["common", "esp32c3", "esp32s3", "rp2040"]
 
 [workspace.package]
 version = "0.1.0"
@@ -21,6 +21,7 @@ embassy-sync = "0.7.2"
 embassy-time = "0.5.0"
 embassy-usb = "0.5.1"
 embedded-graphics = { version = "0.8.1", features = ["fixed"] }
+embedded-io-async = "0.7.0"
 esp-bootloader-esp-idf = "0.4.0"
 esp-hal = { version = "1.0.0", features = ["unstable"] }
 esp-hal-smartled = "0.17.0"

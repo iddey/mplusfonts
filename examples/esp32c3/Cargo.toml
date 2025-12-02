@@ -1,0 +1,39 @@
+[package]
+name = "mplusfonts-examples-esp32c3"
+version = "0.1.0"
+edition = "2024"
+readme = true
+repository = "https://github.com/iddey/mplusfonts"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[[bin]]
+name = "mini-mono"
+required-features = ["esp32c3"]
+
+[dependencies]
+embassy-executor.workspace = true
+embassy-futures.workspace = true
+embassy-sync.workspace = true
+embassy-time.workspace = true
+embedded-graphics.workspace = true
+embedded-io-async.workspace = true
+esp-bootloader-esp-idf.workspace = true
+esp-hal.workspace = true
+esp-hal-smartled.workspace = true
+esp-rtos.workspace = true
+heapless.workspace = true
+mplusfonts.workspace = true
+mplusfonts-examples-common.workspace = true
+smart-leds-trait.workspace = true
+ssd1306.workspace = true
+static_cell.workspace = true
+
+[features]
+esp32c3 = [
+    "esp-bootloader-esp-idf/esp32c3",
+    "esp-hal/esp32c3",
+    "esp-hal-smartled/esp32c3",
+    "esp-rtos/esp32c3",
+    "heapless/portable-atomic-unsafe-assume-single-core",
+]
