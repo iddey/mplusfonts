@@ -1,0 +1,21 @@
+[target.riscv32imc-unknown-none-elf]
+runner = "espflash flash --monitor --chip esp32c3"
+rustflags = [
+    "-C", "link-arg=-Tlinkall.x",
+]
+
+[build]
+target = "riscv32imc-unknown-none-elf"
+
+[unstable]
+build-std = ["core"]
+
+[profile.dev]
+opt-level = "z"
+debug = "full"
+lto = "fat"
+
+[profile.release]
+opt-level = "z"
+debug = "none"
+lto = "fat"
