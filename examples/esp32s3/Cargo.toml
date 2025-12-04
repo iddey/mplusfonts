@@ -1,7 +1,7 @@
 [package]
 name = "mplusfonts-examples-esp32s3"
-version.workspace = true
-edition.workspace = true
+version = "0.1.0"
+edition = "2024"
 readme.workspace = true
 repository.workspace = true
 license.workspace = true

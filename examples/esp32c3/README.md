@@ -16,6 +16,8 @@ Binaries are uploaded via USB in bootloader mode. Usage:
   - `common` - A library crate that contains the bitmap font definition used: `BITMAP_FONT_1`; this
     avoids having to do `mplus!` macro expansion with incremental builds of the example application
     crate.
+- `round-tft` - An example that uses a `Gray4` bitmap font for an `Rgb565` TFT display (with `Bgr`
+  ordering).
 
 The `esp32c3` feature is required for all binaries in this crate, it enables the `esp32c3` features
 of the `esp-*` crates; this enables additional crate features for when a single processor core is

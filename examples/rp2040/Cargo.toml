@@ -1,7 +1,7 @@
 [package]
 name = "mplusfonts-examples-rp2040"
-version.workspace = true
-edition.workspace = true
+version = "0.1.0"
+edition = "2024"
 readme.workspace = true
 repository.workspace = true
 license.workspace = true
@@ -25,8 +25,10 @@ embedded-graphics.workspace = true
 fixed.workspace = true
 fixed-macro.workspace = true
 heapless.workspace = true
+mipidsi.workspace = true
 mplusfonts.workspace = true
 mplusfonts-examples-common.workspace = true
+panic-halt.workspace = true
 pio.workspace = true
 rgb.workspace = true
 ssd1306.workspace = true
