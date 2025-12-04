@@ -4,9 +4,9 @@ Parametrized bitmap fonts for [`embedded-graphics`], with font rasterization pow
 
 Adds an *optimal* subset of [**M<sup>+</sup> FONTS**] to your next embedded Rust project.[^1]
 
-| 0.42″ OLED                                     | «TODO»                                         |
+| 0.42″ OLED                                     | 1.28″ TFT-LCD                                  |
 | ---------------------------------------------- | ---------------------------------------------- |
-| ![monochrome](assets/mini-mono-boards.png)     | ![grayscale](assets/mango-screenshot.png)      |
+| ![monochrome](assets/mini-mono-boards.png)     | ![grayscale](assets/round-tft-board.png)       |
 
 [^1]: Rust 2024 is required to build this crate
 
@@ -53,7 +53,7 @@ Adds an *optimal* subset of [**M<sup>+</sup> FONTS**] to your next embedded Rust
 
 ```toml
 [dependencies]
-mplusfonts = "0.3.1"
+mplusfonts = "0.3.2"
 ```
 
 ```rust
