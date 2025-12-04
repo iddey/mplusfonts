@@ -21,6 +21,7 @@ embedded-graphics.workspace = true
 fixed.workspace = true
 fixed-macro.workspace = true
 heapless = { workspace = true, features = ["portable-atomic-critical-section"] }
+mipidsi.workspace = true
 mplusfonts.workspace = true
 mplusfonts-examples-common.workspace = true
 panic-halt.workspace = true

@@ -20,6 +20,7 @@ esp-hal = { workspace = true, features = ["esp32c3"] }
 esp-hal-smartled = { workspace = true, features = ["esp32c3"] }
 esp-rtos = { workspace = true, features = ["esp32c3"] }
 heapless = { workspace = true, features = ["portable-atomic-unsafe-assume-single-core"] }
+mipidsi.workspace = true
 mplusfonts.workspace = true
 mplusfonts-examples-common.workspace = true
 panic-halt.workspace = true
