@@ -1,6 +1,13 @@
 # Changelog
 
-## [Unreleased]
+## [0.3.2] - 2025-12-04
+
+### Added
+
+- Second two examples that run on development board with built-in color displays. These small round
+  displays have a screen resolution of no more than 240 pixels across, but a grayscale bitmap font
+  with a bit depth of 4 does have a clean look as `mplusfonts` takes advantage of that the display
+  supports up to 6 bits of pixel information per color channel.
 
 ### Fixed
 
@@ -185,3 +192,4 @@
 [0.2.4]: https://github.com/iddey/mplusfonts/releases/tag/v0.2.4
 [0.3.0]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.0
 [0.3.1]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.1
+[0.3.2]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.2

@@ -4,7 +4,6 @@
 #![no_std]
 #![no_main]
 
-mod display;
 mod rgb_led;
 
 use core::panic::PanicInfo;
@@ -28,7 +27,7 @@ use heapless::Vec;
 use mplusfonts::style::BitmapFontStyle;
 use mplusfonts::{BitmapFont, mplus};
 use mplusfonts_examples_common::BITMAP_FONT_1;
-use mplusfonts_examples_common::usb_serial;
+use mplusfonts_examples_common::{display, usb_serial};
 use ssd1306::Ssd1306;
 use ssd1306::command::AddrMode;
 use ssd1306::mode::BufferedGraphicsMode;

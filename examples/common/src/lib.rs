@@ -1,5 +1,7 @@
 #![no_std]
 
+pub mod display;
+pub mod signals;
 pub mod usb_serial;
 
 use embedded_graphics::pixelcolor::BinaryColor;
