@@ -11,6 +11,10 @@ publish.workspace = true
 name = "mini-mono"
 required-features = ["esp32c3"]
 
+[[bin]]
+name = "round-tft"
+required-features = ["esp32c3"]
+
 [dependencies]
 embassy-embedded-hal.workspace = true
 embassy-executor.workspace = true

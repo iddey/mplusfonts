@@ -10,7 +10,6 @@ repository = "https://github.com/iddey/mplusfonts"
 license = "MIT OR Apache-2.0"
 keywords = ["bitmap", "font", "kanji", "monospaced", "variable-width"]
 categories = ["embedded", "graphics", "no-std", "no-std::no-alloc"]
-autoexamples = false
 
 [dependencies]
 embedded-graphics = "0.8.1"
