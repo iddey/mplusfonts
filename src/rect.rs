@@ -100,12 +100,16 @@ impl RectangleExt for Rectangle {
     }
 
     fn y_reduce(&self, top: i32, bottom: i32) -> Self {
+        let extent = top.saturating_sub(self.top_left.y);
+        let extent = extent.try_into().unwrap_or_default();
+        let new_size = Size::new(Default::default(), extent);
+        let new_size = self.size.saturating_sub(new_size);
         let top_left = Point::new(self.top_left.x, top);
         let top_left = self.top_left.component_max(top_left);
         let height = bottom.saturating_sub(top_left.y);
         let height = height.try_into().unwrap_or_default();
         let size = Size::new(self.size.width, height);
-        let size = self.size.component_min(size);
+        let size = new_size.component_min(size);
 
         Self { top_left, size }
     }
@@ -491,6 +495,21 @@ mod tests {
             Rectangle::new(Point::new(1111, 2222), Size::new(3333, 4444)),
             2222, 12800,
             Rectangle::new(Point::new(1111, 2222), Size::new(3333, 4444)),
+
+        y_reduce_top_to_1600_and_bottom_to_6400_for_1111_2222_3333_4444,
+            Rectangle::new(Point::new(1111, 2222), Size::new(3333, 4444)),
+            1600, 3200,
+            Rectangle::new(Point::new(1111, 2222), Size::new(3333, 3200 - 2222)),
+
+        y_reduce_top_to_3200_and_bottom_to_6400_for_1111_2222_3333_4444,
+            Rectangle::new(Point::new(1111, 2222), Size::new(3333, 4444)),
+            3200, 6400,
+            Rectangle::new(Point::new(1111, 3200), Size::new(3333, 6400 - 3200)),
+
+        y_reduce_top_to_6400_and_bottom_to_12800_for_1111_2222_3333_4444,
+            Rectangle::new(Point::new(1111, 2222), Size::new(3333, 4444)),
+            6400, 12800,
+            Rectangle::new(Point::new(1111, 6400), Size::new(3333, 4444 + 2222 - 6400)),
 
         y_reduce_top_to_0_and_bottom_to_25600_for_1111_2222_3333_4444,
             Rectangle::new(Point::new(1111, 2222), Size::new(3333, 4444)),
