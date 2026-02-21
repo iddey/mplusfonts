@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.3] - 2026-02-21
+
+### Changed
+
+- Upgrade dependencies: `embedded-graphics 0.8.2` and `regex 1.12.3`.
+
 ## [0.3.2] - 2025-12-04
 
 ### Added
@@ -193,3 +199,4 @@
 [0.3.0]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.0
 [0.3.1]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.1
 [0.3.2]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.2
+[0.3.3]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.3

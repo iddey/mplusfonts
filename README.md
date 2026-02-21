@@ -53,7 +53,7 @@ Adds an *optimal* subset of [**M<sup>+</sup> FONTS**] to your next embedded Rust
 
 ```toml
 [dependencies]
-mplusfonts = "0.3.2"
+mplusfonts = "0.3.3"
 ```
 
 ```rust
