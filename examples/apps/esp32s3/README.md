@@ -17,7 +17,7 @@ Binaries are uploaded via USB in bootloader mode. Usage: `cargo run --bin <examp
 
 ## Minimum supported Rust version
 
-The minimum supported Rust version for `mplusfonts-examples-esp32s3` is `1.89`.
+The minimum supported Rust version for `mplusfonts-examples-esp32s3` is `1.92`.
 
 ## License
 
