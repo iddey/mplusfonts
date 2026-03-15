@@ -2,9 +2,8 @@ use embedded_graphics::iterator::raw::RawDataSlice;
 use embedded_graphics::pixelcolor::PixelColor;
 use embedded_graphics::pixelcolor::raw::BigEndian;
 
-use crate::DecorationDimensions;
 use crate::charmap::{Charmap, CharmapEntry};
-use crate::metrics::BitmapFontMetrics;
+use crate::metrics::{BitmapFontMetrics, DecorationDimensions};
 
 /// Bitmap font.
 #[derive(Debug)]
