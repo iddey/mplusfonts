@@ -102,6 +102,7 @@ macro_rules! bless_render_glyphs {
 
                 write!(expected_data, "\n    ]")?;
                 write!(expected_data, "\n)")?;
+                write!(expected_data, "\n")?;
 
                 Ok(())
             }
