@@ -22,7 +22,14 @@ embedded-text = { version = "0.7.3", features = ["ansi"] }
 chrono = { version = "0.4", features = ["clock"] }
 
 [features]
+# Allows the types in this crate and its dependencies to be formatted via defmt.
 defmt = ["dep:defmt", "embedded-graphics/defmt"]
+
+# Renders braille patterns with unpunched dots shown as very small squares.
+alt-braille = ["mplusfonts-macros/alt-braille"]
+
+# Renders kanji characters with their corresponding JIS X 0213:2004 glyphs.
+alt-jis2004 = ["mplusfonts-macros/alt-jis2004"]
 
 [workspace]
 members = ["macros"]

@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Allow the JIS X 0213:2004 forms of kanji glyphs to substitute for the JIS X 0212:1990 forms using
+  the `alt-jis2004` feature; this, along with `alt-braille`, is now accessible via the `mplusfonts`
+  crate in addition to being available when `mplusfonts-macros` is added as a dependency.
+
 ## [0.3.3] - 2026-02-21
 
 ### Changed

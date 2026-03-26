@@ -59,6 +59,7 @@ pub fn render(args: &Arguments, is_fallback: bool) -> BTreeMap<String, CharmapEn
             .builder(font_ref)
             .normalized_coords(&coords)
             .size(pixels_per_em)
+            .features(&[("jp04", cfg!(feature = "alt-jis2004") as u16)])
             .features(&[("liga", !is_fallback as u16)])
             .build()
     });

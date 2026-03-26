@@ -37,3 +37,6 @@ bless-tests = []
 
 # Renders braille patterns with unpunched dots shown as very small squares.
 alt-braille = []
+
+# Renders kanji characters with their corresponding JIS X 0213:2004 glyphs.
+alt-jis2004 = []
