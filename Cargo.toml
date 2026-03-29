@@ -15,6 +15,7 @@ categories = ["embedded", "graphics", "no-std", "no-std::no-alloc"]
 embedded-graphics = "0.8.2"
 mplusfonts-macros = { version = "=0.3.3", path = "macros" }
 defmt = { version = "1.0", optional = true }
+epd-spectra = { version = "0.4.0", optional = true }
 
 [dev-dependencies]
 embedded-graphics-simulator = "0.8.0"
@@ -30,6 +31,9 @@ alt-braille = ["mplusfonts-macros/alt-braille"]
 
 # Renders kanji characters with their corresponding JIS X 0213:2004 glyphs.
 alt-jis2004 = ["mplusfonts-macros/alt-jis2004"]
+
+# Enables text rendering to a range of tricolor electrophoretic displays via epd-spectra.
+epd-spectra = ["dep:epd-spectra"]
 
 [workspace]
 members = ["macros"]

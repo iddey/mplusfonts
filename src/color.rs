@@ -165,12 +165,25 @@ macro_rules! impl_linear_gray {
 
 impl_linear_gray!(Gray2, Gray4, Gray8);
 
-impl<const N: usize> Linear<BinaryColor> for Colormap<BinaryColor, N> {
-    fn linear(start: BinaryColor, end: BinaryColor) -> Self {
-        let colors = array::from_fn(|index| if index < N / 2 { start } else { end });
+macro_rules! impl_linear_black_and_white {
+    ($($black_and_white_type:ty),+ $(,)?) => {
+        $(
+            impl<const N: usize> Linear<$black_and_white_type> for Colormap<$black_and_white_type, N> {
+                fn linear(start: $black_and_white_type, end: $black_and_white_type) -> Self {
+                    let colors = array::from_fn(|index| if index < N / 2 { start } else { end });
 
-        Self(colors)
+                    Self(colors)
+                }
+            }
+        )*
     }
+}
+
+impl_linear_black_and_white!(BinaryColor);
+
+#[cfg(feature = "epd-spectra")]
+impl_linear_black_and_white! {
+    epd_spectra::TriColor,
 }
 
 macro_rules! impl_invert_rgb {
@@ -215,6 +228,29 @@ impl Invert for BinaryColor {
     fn invert(self) -> Self {
         self.invert()
     }
+}
+
+#[allow(unused_macros)]
+macro_rules! impl_invert_black_and_white {
+    ($($black_and_white_type:ty),+ $(,)?) => {
+        $(
+            impl Invert for $black_and_white_type {
+                fn invert(self) -> Self {
+                    match self {
+                        Self::Black => Self::White,
+                        Self::White => Self::Black,
+                        #[allow(unreachable_patterns)]
+                        color => color,
+                    }
+                }
+            }
+        )*
+    }
+}
+
+#[cfg(feature = "epd-spectra")]
+impl_invert_black_and_white! {
+    epd_spectra::TriColor,
 }
 
 const fn screen_mix_channel(first: u8, second: u8, start: u8, end: u8) -> u8 {
@@ -275,14 +311,27 @@ macro_rules! impl_screen_mix_gray {
 
 impl_screen_mix_gray!(Gray2, Gray4, Gray8);
 
-impl Screen for BinaryColor {
-    fn screen(self, other: Self, start: Self, end: Self) -> Self {
-        if self == end || other == end {
-            end
-        } else {
-            start
-        }
+macro_rules! impl_screen_mix_black_and_white {
+    ($($black_and_white_type:ty),+ $(,)?) => {
+        $(
+            impl Screen for $black_and_white_type {
+                fn screen(self, other: Self, start: Self, end: Self) -> Self {
+                    if self == end || other == end {
+                        end
+                    } else {
+                        start
+                    }
+                }
+            }
+        )*
     }
+}
+
+impl_screen_mix_black_and_white!(BinaryColor);
+
+#[cfg(feature = "epd-spectra")]
+impl_screen_mix_black_and_white! {
+    epd_spectra::TriColor,
 }
 
 const fn weighted_avg_mix_channel(
@@ -393,25 +442,38 @@ macro_rules! impl_weighted_avg_mix_gray {
 
 impl_weighted_avg_mix_gray!(Gray2, Gray4, Gray8);
 
-impl WeightedAvg for BinaryColor {
-    fn weighted_avg(
-        self,
-        other: Self,
-        start: Self,
-        end: Self,
-        other_start: Self,
-        other_end: Self,
-    ) -> Self {
-        if start == other_start {
-            if self == end || other == other_end {
-                end
-            } else {
-                start
+macro_rules! impl_weighted_avg_mix_black_and_white {
+    ($($black_and_white_type:ty),+ $(,)?) => {
+        $(
+            impl WeightedAvg for $black_and_white_type {
+                fn weighted_avg(
+                    self,
+                    other: Self,
+                    start: Self,
+                    end: Self,
+                    other_start: Self,
+                    other_end: Self,
+                ) -> Self {
+                    if start == other_start {
+                        if self == end || other == other_end {
+                            end
+                        } else {
+                            start
+                        }
+                    } else {
+                        self
+                    }
+                }
             }
-        } else {
-            self
-        }
+        )*
     }
+}
+
+impl_weighted_avg_mix_black_and_white!(BinaryColor);
+
+#[cfg(feature = "epd-spectra")]
+impl_weighted_avg_mix_black_and_white! {
+    epd_spectra::TriColor,
 }
 
 #[cfg(test)]
