@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.3.4] - 2026-03-31
 
 ### Added
 
@@ -9,6 +9,10 @@
   crate in addition to being available when `mplusfonts-macros` is added as a dependency.
 - Implement `Linear<TriColor>` for `Colormap<TriColor, N>` as well as `Invert`, `Screen`, and
   `WeightedAvg` for `TriColor` from the `epd-spectra` crate, behind the `epd-spectra` feature.
+
+### Changed
+
+- Upgrade dependencies: `swash 0.2.7`.
 
 ## [0.3.3] - 2026-02-21
 
@@ -210,3 +214,4 @@
 [0.3.1]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.1
 [0.3.2]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.2
 [0.3.3]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.3
+[0.3.4]: https://github.com/iddey/mplusfonts/releases/tag/v0.3.4
